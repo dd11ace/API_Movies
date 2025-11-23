@@ -43,18 +43,30 @@ class CustomRequester:
         :param need_logging: Флаг для логирования (по умолчанию True).
         :return: Объект ответа requests.Response.
         """
-        url = f"{self.base_url}{endpoint}"
-        response = self.session.request(method, url, json=data, headers=self.headers)
-
-        if need_logging:
-            self.log_request_and_response(response)
-
-        if response.status_code != expected_status:
-            raise ValueError(
-                f"Unexpected status code: {response.status_code}. Expected: {expected_status}"
+        try:
+            url = f"{self.base_url}{endpoint}"
+            response = self.session.request(
+                method, url, json=data, headers=self.headers
             )
 
-        return response
+            if need_logging:
+                self.log_request_and_response(response)
+
+            if response.status_code != expected_status:
+                raise ValueError(
+                    f"Unexpected status code: {response.status_code}. Expected: {expected_status}"
+                )
+
+            return response
+        except requests.exceptions.ConnectionError as e:
+            print(e)
+            raise
+        except requests.exceptions.RequestException as e:
+            print(e)
+            raise
+        except Exception as e:
+            print(e)
+            raise
 
     def _update_session_headers(
         self, session: requests.Session, **kwargs: dict[str : str | list[str]]
