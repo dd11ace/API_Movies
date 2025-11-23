@@ -37,7 +37,7 @@ class CustomRequester:
         """
         Универсальный метод для отправки запросов.
         :param method: HTTP метод (GET, POST, PUT, DELETE и т.д.).
-        :param endpoint: Эндпоинт (например, "/login").
+        :param endpoint: Эндпоинт (например, "/movies").
         :param data: Тело запроса (JSON-данные).
         :param expected_status: Ожидаемый статус-код (по умолчанию 200).
         :param need_logging: Флаг для логирования (по умолчанию True).
