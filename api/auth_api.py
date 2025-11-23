@@ -1,9 +1,9 @@
 from custom_requester.custom_requester import CustomRequester
 from requests import Session, Response
 
-from constants import AUTH_URL, LOGIN_ENDPOINT, BASE_URL
+from constants import AUTH_URL, LOGIN_ENDPOINT
 
-from utils.credentials import ADMIN_USER_CREDENTIALS
+from typing import Literal
 
 
 class AuthAPI(CustomRequester):
@@ -26,8 +26,13 @@ class AuthAPI(CustomRequester):
             expected_status=expected_status,
         )
 
-    def authenticate(self, user_credentials, session):
-        response = self.login_user(user_credentials, expected_status=201)
+    def authenticate(self, user_credentials: dict[str:str], session: Session) -> None:
+        """
+        Авторизация пользователя
+        :param user_credentials: Данные для логина.
+        :param expected_status: Ожидаемый статус-код.
+        """
+        response = self.login_user(user_credentials)
 
         response_data = response.json()
 

@@ -40,6 +40,24 @@ class MoviesAPI(CustomRequester):
             expected_status=expected_status,
         )
 
+    def patch_movie(
+        self,
+        movie_id: int,
+        movie_data: dict[str : str | int | bool],
+        expected_status: int = 200,
+    ) -> Response:
+        """
+        Редактирование фильма.
+        :param movie_id: ID фильма.
+        :param expected_status: Ожидаемый статус-код.
+        """
+        return self.send_request(
+            method="PATCH",
+            data=movie_data,
+            endpoint=f"{MOVIES_ENDPOINT}/{movie_id}",
+            expected_status=expected_status,
+        )
+
     def delete_movie(self, movie_id: int, expected_status: int = 200) -> Response:
         """
         Удаление фильма.

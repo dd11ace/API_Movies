@@ -3,6 +3,8 @@ import json
 import logging
 import os
 
+from constants import HEADERS
+
 from enums.http_method import HTTPMethod
 
 
@@ -11,8 +13,6 @@ class CustomRequester:
     Кастомный реквестер для стандартизации и упрощения отправки HTTP-запросов.
     """
 
-    base_headers = {"Content-Type": "application/json", "Accept": "application/json"}
-
     def __init__(self, session: requests.Session, base_url: str) -> None:
         """
         Инициализация кастомного реквестера.
@@ -20,7 +20,7 @@ class CustomRequester:
         :param base_url: Базовый URL API.
         """
         self.base_url = base_url
-        self.headers = self.base_headers
+        self.headers = HEADERS
         self.session = session
 
         self.logger = logging.getLogger(__name__)
@@ -69,7 +69,7 @@ class CustomRequester:
             raise
 
     def _update_session_headers(
-        self, session: requests.Session, **kwargs: dict[str : str | list[str]]
+        self, session: requests.Session, **kwargs: dict[str:str]
     ) -> None:
         """
         Обновление заголовков сессии.
@@ -79,7 +79,7 @@ class CustomRequester:
         self.headers.update(kwargs)  # Обновляем базовые заголовки
         session.headers.update(self.headers)  # Обновляем заголовки в текущей сессии
 
-    def log_request_and_response(self, response):
+    def log_request_and_response(self, response: requests.Response) -> None:
         """
         Логирование запросов и ответов.
         :param response: Объект ответа requests.Response.
