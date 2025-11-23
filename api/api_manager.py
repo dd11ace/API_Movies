@@ -1,6 +1,6 @@
 from requests import Session
 
-from movies_api import MoviesAPI
+from .movies_api import MoviesAPI
 
 
 class APIManager:

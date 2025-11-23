@@ -13,6 +13,21 @@ class MoviesAPI(CustomRequester):
         super().__init__(base_url=BASE_URL, session=session)
         self.session = session
 
+    def create_movie(
+        self, movie_data: dict[str : str | int | bool], expected_status: int = 201
+    ) -> Response:
+        """
+        Создание фильма
+        :param movie_data: данные для фильма в формате JSON
+        :param expected_status: Ожидаемый статус-код.
+        """
+        return self.send_request(
+            method="POST",
+            data=movie_data,
+            endpoint=MOVIES_ENDPOINT,
+            expected_status=expected_status,
+        )
+
     def get_movie_info(self, movie_id: int, expected_status: int = 200) -> Response:
         """
         Получение информации о фильме.
