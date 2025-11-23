@@ -4,3 +4,4 @@ HEADERS = {"Content-Type": "application/json", "Accept": "application/json"}
 
 # Endpoints
 MOVIES_ENDPOINT = "/movies"
+LOGIN_ENDPOINT = "/login"
