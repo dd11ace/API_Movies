@@ -20,10 +20,10 @@ def test_movie_data() -> dict[str : str | int | bool]:
     return movie_data
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def movie_id() -> int:
     """Возвращает случайный id"""
-    return DataGenerator.generate_existing_random_id()
+    return DataGenerator.generate_random_id()
 
 
 @pytest.fixture(scope="session")
@@ -56,6 +56,6 @@ def authenticated_admin(
     return api_manager
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def nonexistent_movie_id() -> int:
-    return random.randint(50000, 100000)
+    return DataGenerator.generate_random_non_existing_id()

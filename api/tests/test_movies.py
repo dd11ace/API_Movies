@@ -64,20 +64,6 @@ class TestMovies:
             "ID жанра не совпадает"
         )
 
-    def test_delete_movie(
-        self,
-        authenticated_admin: APIManager,
-        movie_id: int,
-    ) -> None:
-        """Тест на удаление фильма по ID"""
-        response = authenticated_admin.movies_api.delete_movie(movie_id)
-
-        assert response.status_code == 200, "Ошибка при удалении"
-
-        response_data = response.json()
-
-        assert response_data["id"] == movie_id, "ID фильмов не совпадают"
-
     def test_patch_movie(
         self,
         authenticated_admin: APIManager,
@@ -86,14 +72,14 @@ class TestMovies:
     ) -> None:
         """Тест редактирования фильма"""
         response = authenticated_admin.movies_api.patch_movie(
-            movie_id=movie_id, movie_data=test_movie
+            movie_id, movie_data=test_movie
         )
 
         assert response.status_code == 200, "Ошибка при редактировании фильма"
 
         response_data = response.json()
 
-        assert response_data["id"] == movie_id
+        assert response_data["id"] == movie_id, "ID не совпадают"
 
         assert response_data["name"] == test_movie["name"], (
             "Названия фильмов не совпадают"
@@ -116,3 +102,17 @@ class TestMovies:
         assert response_data["genreId"] == test_movie["genreId"], (
             "ID жанра не совпадает"
         )
+
+    def test_delete_movie(
+        self,
+        authenticated_admin: APIManager,
+        movie_id: int,
+    ) -> None:
+        """Тест на удаление фильма по ID"""
+        response = authenticated_admin.movies_api.delete_movie(movie_id)
+
+        assert response.status_code == 200, "Ошибка при удалении"
+
+        response_data = response.json()
+
+        assert response_data["id"] == movie_id, "ID фильмов не совпадают"

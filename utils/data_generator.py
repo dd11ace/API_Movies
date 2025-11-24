@@ -32,7 +32,7 @@ class DataGenerator:
         return movie_data
 
     @staticmethod
-    def generate_existing_random_id(id_range: tuple = (1, 3000)):
+    def generate_random_id(id_range: tuple = (1, 4000)):
         """Генерация случайного существуего id"""
         while True:
             random_id = random.randint(id_range[0], id_range[1])
@@ -45,6 +45,25 @@ class DataGenerator:
                 if response.status_code == 200:
                     return random_id
                 # Для ошибки 404 цикл продолжается
+
+            except requests.exceptions.RequestException:
+                # Продолжение при ошибке
+                pass
+
+    @staticmethod
+    def generate_random_non_existing_id(id_range: tuple = (1, 10000)):
+        """Генерация случайного несуществуего id для негативных тестов"""
+        while True:
+            random_id = random.randint(id_range[0], id_range[1])
+
+            try:
+                response = requests.get(
+                    f"{BASE_URL}{MOVIES_ENDPOINT}/{random_id}", timeout=3
+                )
+
+                if response.status_code == 404:
+                    return random_id
+                # Для 200 цикл продолжается
 
             except requests.exceptions.RequestException:
                 # Продолжение при ошибке
