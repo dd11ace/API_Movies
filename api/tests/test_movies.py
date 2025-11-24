@@ -70,6 +70,32 @@ class TestMovies:
             "ID жанра не совпадает"
         )
 
+    @pytest.mark.parametrize(
+        "field", ["name", "price", "description", "location", "published", "genreId"]
+    )
+    def test_patch_movie_single_field(
+        self,
+        field: str,
+        authenticated_admin: APIManager,
+        movie_id: int,
+        test_movie: dict[str : str | int | bool],
+    ) -> None:
+        new_data = {field: test_movie[field]}
+
+        response = authenticated_admin.movies_api.patch_movie(movie_id, new_data)
+
+        assert response.status_code == 200, (
+            f"Ошибка {response.status_code}, при обновлении поля {field}"
+        )
+
+        response_data = response.json()
+
+        assert response_data["id"] == movie_id, "ID не совпадают"
+
+        assert response_data[field] == test_movie[field], (
+            f"Ошибка: поле {field} не обновилось"
+        )
+
     def test_create_movie(
         self,
         test_movie: dict[str : str | int | bool,],
