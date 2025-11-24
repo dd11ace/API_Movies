@@ -1,4 +1,4 @@
-from requests import Session
+import requests
 
 from .movies_api import MoviesAPI
 from .auth_api import AuthAPI
@@ -9,7 +9,7 @@ class APIManager:
     Класс для управления API-классами с единой HTTP-сессией.
     """
 
-    def __init__(self, session: Session) -> None:
+    def __init__(self, session: requests.Session) -> None:
         """
         Инициализация APIManager.
         :param session: HTTP-сессия, используемая всеми API-классами

@@ -46,7 +46,7 @@ class CustomRequester:
         try:
             url = f"{self.base_url}{endpoint}"
             response = self.session.request(
-                method, url, json=data, headers=self.headers
+                method, url, json=data, headers=self.session.headers
             )
 
             if need_logging:

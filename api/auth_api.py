@@ -1,17 +1,17 @@
 from custom_requester.custom_requester import CustomRequester
-from requests import Session, Response
+import requests
 
 from constants import AUTH_URL, LOGIN_ENDPOINT
 
 
 class AuthAPI(CustomRequester):
-    def __init__(self, session: Session) -> None:
+    def __init__(self, session: requests.Session) -> None:
         super().__init__(session=session, base_url=AUTH_URL)
         self.session = session
 
     def login_user(
         self, login_data: dict[str:str], expected_status: int = 201
-    ) -> Response:
+    ) -> requests.Response:
         """
         Авторизация пользователя
         :param login_data: Данные для логина.
@@ -24,11 +24,13 @@ class AuthAPI(CustomRequester):
             expected_status=expected_status,
         )
 
-    def authenticate(self, user_credentials: dict[str:str], session: Session) -> None:
+    def authenticate(
+        self, user_credentials: dict[str:str], session: requests.Session
+    ) -> None:
         """
         Аутентификация пользователя
         :param user_credentials: Данные для логина.
-        :param expected_status: Ожидаемый статус-код.
+        :param session: requests.Session.
         """
         response = self.login_user(user_credentials)
 

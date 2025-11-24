@@ -7,7 +7,7 @@ from custom_requester.custom_requester import CustomRequester
 
 from api.api_manager import APIManager
 
-from constants import BASE_URL
+from constants import BASE_URL, HEADERS
 from utils.credentials import ADMIN_USER_CREDENTIALS
 
 
@@ -46,13 +46,14 @@ def api_manager(session: requests.Session) -> requests.Session:
     return APIManager(session)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def authenticated_admin(
     api_manager: APIManager, session: requests.Session
 ) -> APIManager:
     api_manager.auth_api.authenticate(ADMIN_USER_CREDENTIALS, session)
 
-    return api_manager
+    yield api_manager
+    api_manager.session.headers.clear()
 
 
 @pytest.fixture()
