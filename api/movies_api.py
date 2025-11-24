@@ -13,6 +13,15 @@ class MoviesAPI(CustomRequester):
         super().__init__(base_url=BASE_URL, session=session)
         self.session = session
 
+    def get_movies(self, expected_status: int = 200) -> Response:
+        """
+        Получение афиш фильмов
+        :param expected_status: Ожидаемый статус-код.
+        """
+        return self.send_request(
+            method="GET", endpoint=MOVIES_ENDPOINT, expected_status=expected_status
+        )
+
     def get_movie_info(self, movie_id: int, expected_status: int = 200) -> Response:
         """
         Получение информации о фильме.

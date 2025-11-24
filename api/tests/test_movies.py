@@ -3,6 +3,22 @@ from api.api_manager import APIManager
 
 
 class TestMovies:
+    def test_get_movies(self, api_manager: APIManager) -> None:
+        """Тестирование получение афиш"""
+        response = api_manager.movies_api.get_movies()
+
+        assert response.status_code == 200, "Ошибка получения афиш"
+
+        response_data = response.json()
+
+        assert response_data["count"] is not None, "В ответе отсутсвует count"
+
+        assert response_data["page"] is not None, "В ответе отсутсвует page"
+
+        assert response_data["pageSize"] is not None, "В ответе отсутсвует pageSize"
+
+        assert response_data["pageCount"] is not None, "В ответе отсутсвует pageCount"
+
     def test_get_movie(self, api_manager: APIManager, movie_id: int) -> None:
         """Тестирование получение фильма по ID"""
         response = api_manager.movies_api.get_movie_info(movie_id)
