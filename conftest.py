@@ -12,7 +12,7 @@ from constants import BASE_URL
 from utils.credentials import ADMIN_USER_CREDENTIALS
 
 
-@pytest.fixture(scope="session", name="test_movie")
+@pytest.fixture(name="test_movie")
 def test_movie_data() -> dict[str : str | int | bool]:
     """Fixture с данными для создания фильма"""
     movie_data = DataGenerator.generate_random_movie_data()
@@ -58,4 +58,11 @@ def authenticated_admin(
 
 @pytest.fixture()
 def nonexistent_movie_id() -> int:
+    """Несуществующий id для негативных тестов"""
     return DataGenerator.generate_random_non_existing_id()
+
+
+@pytest.fixture()
+def existing_movie_name() -> str:
+    """Существующие название фильма"""
+    return DataGenerator.generate_random_existing_movie_name()

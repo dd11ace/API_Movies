@@ -11,7 +11,9 @@ class DataGenerator:
     """Генерация тестовых данных"""
 
     @staticmethod
-    def generate_random_movie_data() -> dict[str : str | int | bool]:
+    def generate_random_movie_data(
+        name: str = None,
+    ) -> dict[str : str | int | bool]:
         """
         Генерация данных для создания фильма
 
@@ -20,7 +22,7 @@ class DataGenerator:
         """
 
         movie_data = {
-            "name": faker.sentence(nb_words=2),
+            "name": name or faker.sentence(nb_words=2),
             "imageUrl": faker.image_url(),
             "price": random.randint(100, 1000),
             "description": faker.text(max_nb_chars=200),
@@ -32,7 +34,25 @@ class DataGenerator:
         return movie_data
 
     @staticmethod
-    def generate_random_id(id_range: tuple = (1, 4000)):
+    def generate_random_existing_movie_name(id_range: tuple = (1, 4000)) -> str:
+        """Генерация случайного имени из существуещего фильма"""
+        while True:
+            random_id = random.randint(id_range[0], id_range[1])
+
+            try:
+                response = requests.get(
+                    f"{BASE_URL}{MOVIES_ENDPOINT}/{random_id}", timeout=3
+                )
+
+                if response.status_code == 200:
+                    return response.json()["name"]
+
+            except requests.exceptions.RequestException:
+                # Продолжение при ошибке
+                pass
+
+    @staticmethod
+    def generate_random_id(id_range: tuple = (1, 4000)) -> int:
         """Генерация случайного существуего id"""
         while True:
             random_id = random.randint(id_range[0], id_range[1])

@@ -89,3 +89,29 @@ class TestMoviesNegative:
         assert response_data["statusCode"] is not None, (
             "Отсутсвует код ошибки в логе ответа"
         )
+
+    def test_create_movie_with_existing_name(
+        self,
+        existing_movie_name,
+        authenticated_admin: APIManager,
+        test_movie: dict[str : str | int | bool],
+    ) -> None:
+        test_movie["name"] = existing_movie_name
+
+        response = authenticated_admin.movies_api.create_movie(
+            movie_data=test_movie, expected_status=409
+        )
+
+        assert response.status_code == 409, (
+            f"Ожидалась ошибка со статус кодом 409, но был получен {response.status_code}"
+        )
+
+        response_data = response.json()
+
+        assert response_data["message"] is not None, (
+            "Отсутствует сообщение об ошибке в логе ответа"
+        )
+
+        assert response_data["statusCode"] is not None, (
+            "Отсутсвует код ошибки в логе ответа"
+        )

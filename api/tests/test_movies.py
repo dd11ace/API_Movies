@@ -29,18 +29,22 @@ class TestMovies:
 
         assert response_data["id"] == movie_id, "ID фильмов не совпадают"
 
-    def test_create_movie(
+    def test_patch_movie(
         self,
-        test_movie: dict[str : str | int | bool,],
         authenticated_admin: APIManager,
+        movie_id: int,
+        test_movie: dict[str : str | int | bool],
     ) -> None:
-        """Тестирование создания фильма"""
+        """Тест редактирования фильма"""
+        response = authenticated_admin.movies_api.patch_movie(
+            movie_id, movie_data=test_movie
+        )
 
-        response = authenticated_admin.movies_api.create_movie(test_movie)
-
-        assert response.status_code == 201, "Ошибка при создании фильма"
+        assert response.status_code == 200, "Ошибка при редактировании фильма"
 
         response_data = response.json()
+
+        assert response_data["id"] == movie_id, "ID не совпадают"
 
         assert response_data["name"] == test_movie["name"], (
             "Названия фильмов не совпадают"
@@ -64,22 +68,18 @@ class TestMovies:
             "ID жанра не совпадает"
         )
 
-    def test_patch_movie(
+    def test_create_movie(
         self,
+        test_movie: dict[str : str | int | bool,],
         authenticated_admin: APIManager,
-        movie_id: int,
-        test_movie: dict[str : str | int | bool],
     ) -> None:
-        """Тест редактирования фильма"""
-        response = authenticated_admin.movies_api.patch_movie(
-            movie_id, movie_data=test_movie
-        )
+        """Тестирование создания фильма"""
 
-        assert response.status_code == 200, "Ошибка при редактировании фильма"
+        response = authenticated_admin.movies_api.create_movie(test_movie)
+
+        assert response.status_code == 201, "Ошибка при создании фильма"
 
         response_data = response.json()
-
-        assert response_data["id"] == movie_id, "ID не совпадают"
 
         assert response_data["name"] == test_movie["name"], (
             "Названия фильмов не совпадают"
