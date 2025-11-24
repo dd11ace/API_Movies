@@ -11,9 +11,7 @@ class DataGenerator:
     """Генерация тестовых данных"""
 
     @staticmethod
-    def generate_random_movie_data(
-        name: str = None,
-    ) -> dict[str : str | int | bool]:
+    def generate_random_movie_data() -> dict[str : str | int | bool]:
         """
         Генерация данных для создания фильма
 
@@ -22,7 +20,7 @@ class DataGenerator:
         """
 
         movie_data = {
-            "name": name or faker.sentence(nb_words=2),
+            "name": faker.sentence(nb_words=2),
             "imageUrl": faker.image_url(),
             "price": random.randint(100, 1000),
             "description": faker.text(max_nb_chars=200),

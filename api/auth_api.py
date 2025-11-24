@@ -3,8 +3,6 @@ from requests import Session, Response
 
 from constants import AUTH_URL, LOGIN_ENDPOINT
 
-from typing import Literal
-
 
 class AuthAPI(CustomRequester):
     def __init__(self, session: Session) -> None:
@@ -28,7 +26,7 @@ class AuthAPI(CustomRequester):
 
     def authenticate(self, user_credentials: dict[str:str], session: Session) -> None:
         """
-        Авторизация пользователя
+        Аутентификация пользователя
         :param user_credentials: Данные для логина.
         :param expected_status: Ожидаемый статус-код.
         """

@@ -3,6 +3,8 @@ from api.api_manager import APIManager
 
 
 class TestMoviesNegative:
+    """Класс с негативными тестами"""
+
     def test_get_movie_not_found(
         self, api_manager: APIManager, nonexistent_movie_id: int
     ) -> None:
@@ -117,18 +119,32 @@ class TestMoviesNegative:
             "Отсутсвует код ошибки в логе ответа"
         )
 
-    def test_create_movie_without_name(
-        self, authenticated_admin: APIManager, test_movie: dict[str : str | int | bool]
+    @pytest.mark.parametrize(
+        "field_name",
+        [
+            "name",
+            "description",
+            "price",
+            "location",
+            "published",
+            "genreId",
+        ],
+    )
+    def test_create_movie_without_field(
+        self,
+        authenticated_admin: APIManager,
+        field_name: str,
+        test_movie: dict[str : str | int | bool],
     ) -> None:
-        """Тестирование создания фильма без названия"""
-        test_movie["name"] = None
+        """Тестирование создания фильма с путым полем"""
+        test_movie[field_name] = None
 
         response = authenticated_admin.movies_api.create_movie(
             test_movie, expected_status=400
         )
 
         assert response.status_code == 400, (
-            f"Ожидалась ошибка 400 неверные параметры, но был получен {response.status_code}"
+            f"Ожидалась ошибка 400, но был получен {response.status_code}"
         )
 
         response_data = response.json()
