@@ -14,9 +14,7 @@ from utils.credentials import ADMIN_USER_CREDENTIALS
 
 @pytest.fixture(scope="session", name="test_movie")
 def test_movie_data() -> dict[str : str | int | bool]:
-    """
-    Fixture с данными для создания фильма
-    """
+    """Fixture с данными для создания фильма"""
     movie_data = DataGenerator.generate_random_movie_data()
 
     return movie_data
@@ -24,24 +22,21 @@ def test_movie_data() -> dict[str : str | int | bool]:
 
 @pytest.fixture(scope="session")
 def movie_id() -> int:
-    return random.randint(1, 3000)
+    """Возвращает случайный id"""
+    return DataGenerator.generate_existing_random_id()
 
 
 @pytest.fixture(scope="session")
-def requester():
-    """
-    Fixture для создания экземпляра CustomRequester
-    """
+def requester() -> CustomRequester:
+    """Fixture для создания экземпляра CustomRequester"""
     session = requests.Session()
 
     return CustomRequester(session=session, base_url=BASE_URL)
 
 
 @pytest.fixture(scope="session")
-def session():
-    """
-    Fixture для создания HTTP-сессии
-    """
+def session() -> requests.Session:
+    """Fixture для создания HTTP-сессии"""
     http_session = requests.Session()
     yield http_session
     http_session.close()
@@ -62,5 +57,5 @@ def authenticated_admin(
 
 
 @pytest.fixture(scope="session")
-def nonexistent_movie_id():
+def nonexistent_movie_id() -> int:
     return random.randint(50000, 100000)

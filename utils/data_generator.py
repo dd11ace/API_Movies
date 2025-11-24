@@ -1,5 +1,8 @@
 import random
+import requests
 from faker import Faker
+
+from constants import BASE_URL, MOVIES_ENDPOINT
 
 faker = Faker()
 
@@ -8,7 +11,7 @@ class DataGenerator:
     """Генерация тестовых данных"""
 
     @staticmethod
-    def generate_random_movie_data() -> dict[str, str | int | bool]:
+    def generate_random_movie_data() -> dict[str : str | int | bool]:
         """
         Генерация данных для создания фильма
 
@@ -27,3 +30,22 @@ class DataGenerator:
         }
 
         return movie_data
+
+    @staticmethod
+    def generate_existing_random_id(id_range: tuple = (1, 3000)):
+        """Генерация случайного существуего id"""
+        while True:
+            random_id = random.randint(id_range[0], id_range[1])
+
+            try:
+                response = requests.get(
+                    f"{BASE_URL}{MOVIES_ENDPOINT}/{random_id}", timeout=3
+                )
+
+                if response.status_code == 200:
+                    return random_id
+                # Для ошибки 404 цикл продолжается
+
+            except requests.exceptions.RequestException:
+                # Продолжение при ошибке
+                pass
