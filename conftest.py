@@ -1,4 +1,3 @@
-import random
 import pytest
 import requests
 
@@ -53,7 +52,7 @@ def authenticated_admin(
 ) -> APIManager:
     api_manager.auth_api.authenticate(ADMIN_USER_CREDENTIALS, session)
 
-    yield api_manager
+    return api_manager
 
 
 @pytest.fixture()
