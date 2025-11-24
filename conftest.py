@@ -1,13 +1,9 @@
 import pytest
 import requests
 
-
 from utils.data_generator import DataGenerator
-from custom_requester.custom_requester import CustomRequester
 
 from api.api_manager import APIManager
-
-from constants import BASE_URL, HEADERS
 from utils.credentials import ADMIN_USER_CREDENTIALS
 
 
@@ -26,14 +22,6 @@ def movie_id() -> int:
 
 
 @pytest.fixture(scope="session")
-def requester() -> CustomRequester:
-    """Fixture для создания экземпляра CustomRequester"""
-    session = requests.Session()
-
-    return CustomRequester(session=session, base_url=BASE_URL)
-
-
-@pytest.fixture(scope="session")
 def session() -> requests.Session:
     """Fixture для создания HTTP-сессии"""
     http_session = requests.Session()
@@ -42,7 +30,8 @@ def session() -> requests.Session:
 
 
 @pytest.fixture(scope="session")
-def api_manager(session: requests.Session) -> requests.Session:
+def api_manager(session: requests.Session) -> APIManager:
+    """Возвращает экземпляр APIManager"""
     return APIManager(session)
 
 
@@ -50,6 +39,7 @@ def api_manager(session: requests.Session) -> requests.Session:
 def authenticated_admin(
     api_manager: APIManager, session: requests.Session
 ) -> APIManager:
+    """Возвращает экземпляр APIManager с аутентификацией админа"""
     api_manager.auth_api.authenticate(ADMIN_USER_CREDENTIALS, session)
 
     yield api_manager
@@ -58,11 +48,11 @@ def authenticated_admin(
 
 @pytest.fixture()
 def nonexistent_movie_id() -> int:
-    """Несуществующий id для негативных тестов"""
+    """Возвращает несуществующий id для негативных тестов"""
     return DataGenerator.generate_random_non_existing_id()
 
 
 @pytest.fixture()
 def existing_movie_name() -> str:
-    """Существующие название фильма"""
+    """Возвращает существующие название фильма"""
     return DataGenerator.generate_random_existing_movie_name()

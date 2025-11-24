@@ -1,10 +1,12 @@
-from custom_requester.custom_requester import CustomRequester
 import requests
+from custom_requester.custom_requester import CustomRequester
 
 from constants import AUTH_URL, LOGIN_ENDPOINT
 
 
 class AuthAPI(CustomRequester):
+    """Класс для управления аутентификацией"""
+
     def __init__(self, session: requests.Session) -> None:
         super().__init__(session=session, base_url=AUTH_URL)
         self.session = session

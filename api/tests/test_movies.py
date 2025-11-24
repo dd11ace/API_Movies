@@ -3,6 +3,8 @@ from api.api_manager import APIManager
 
 
 class TestMovies:
+    """Класс для позитивных movies api тестов"""
+
     def test_get_movies(self, api_manager: APIManager) -> None:
         """Тестирование получение афиш"""
         response = api_manager.movies_api.get_movies()
@@ -29,7 +31,7 @@ class TestMovies:
 
         assert response_data["id"] == movie_id, "ID фильмов не совпадают"
 
-    def test_patch_movie(
+    def test_patch_movie_all_fields(
         self,
         authenticated_admin: APIManager,
         movie_id: int,
