@@ -12,7 +12,7 @@ class APIManager:
     def __init__(self, session: Session) -> None:
         """
         Инициализация APIManager.
-        :param session: HTTP-сессия, используемаявсеми API-классами
+        :param session: HTTP-сессия, используемая всеми API-классами
         """
         self.session = session
 

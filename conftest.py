@@ -59,3 +59,8 @@ def authenticated_admin(
     api_manager.auth_api.authenticate(ADMIN_USER_CREDENTIALS, session)
 
     return api_manager
+
+
+@pytest.fixture(scope="session")
+def nonexistent_movie_id():
+    return random.randint(50000, 100000)
