@@ -25,61 +25,35 @@ class TestMoviesNegative:
             "Отсутсвует код ошибки в логе ответа"
         )
 
-    def test_post_without_auth(
-        self, api_manager: APIManager, test_movie: dict[str : str | int | bool]
-    ) -> None:
-        """Тест создания фильма без аутентификации"""
-        response = api_manager.movies_api.create_movie(test_movie, expected_status=401)
-
-        assert response.status_code == 401, (
-            f"Ожидалась ошибка 401 Unauthorized, но был получен {response.status_code}"
-        )
-
-        response_data = response.json()
-
-        assert response_data["message"] is not None, (
-            "Отсутствует сообщение об ошибке в логе ответа"
-        )
-
-        assert response_data["statusCode"] is not None, (
-            "Отсутсвует код ошибки в логе ответа"
-        )
-
-    def test_delete_without_auth(
+    @pytest.mark.parametrize(
+        "method",
+        ["create_movie", "delete_movie", "patch_movie"],
+    )
+    def test_methods_unauthorized(
         self,
         api_manager: APIManager,
-        movie_id,
-    ) -> None:
-        """Тест удаления без аутентификации"""
-        response = api_manager.movies_api.delete_movie(movie_id, expected_status=401)
-
-        assert response.status_code == 401, (
-            f"Ожидалась ошибка 401 Unauthorized, но был получен {response.status_code}"
-        )
-
-        response_data = response.json()
-
-        assert response_data["message"] is not None, (
-            "Отсутствует сообщение об ошибке в логе ответа"
-        )
-
-        assert response_data["statusCode"] is not None, (
-            "Отсутсвует код ошибки в логе ответа"
-        )
-
-    def test_patch_without_auth(
-        self,
-        api_manager: APIManager,
-        movie_id: int,
         test_movie: dict[str : str | int | bool],
+        movie_id: int,
+        method: str,
     ) -> None:
-        """Тест редактирование без аутентификации"""
-        response = api_manager.movies_api.patch_movie(
-            movie_id, test_movie, expected_status=401
-        )
+        """Тестирование запросов без авторизации"""
+        if method == "create_movie":
+            response = api_manager.movies_api.create_movie(
+                test_movie, expected_status=401
+            )
+
+        elif method == "delete_movie":
+            response = api_manager.movies_api.delete_movie(
+                movie_id, expected_status=401
+            )
+
+        elif method == "patch_movie":
+            response = api_manager.movies_api.patch_movie(
+                movie_id, test_movie, expected_status=401
+            )
 
         assert response.status_code == 401, (
-            f"Ожидалась ошибка 401 Unauthorized, но был получен {response.status_code}"
+            f"Ожидалась ошибка 401, но был получен {response.status_code}"
         )
 
         response_data = response.json()
