@@ -53,7 +53,7 @@ def authenticated_admin(
 ) -> APIManager:
     api_manager.auth_api.authenticate(ADMIN_USER_CREDENTIALS, session)
 
-    return api_manager
+    yield api_manager
 
 
 @pytest.fixture()
