@@ -1,5 +1,6 @@
 import random
 import requests
+import string
 from faker import Faker
 
 from constants import BASE_URL, MOVIES_ENDPOINT
@@ -30,6 +31,25 @@ class DataGenerator:
         }
 
         return movie_data
+
+    @staticmethod
+    def generate_random_email() -> str:
+        """Генерация случайного email"""
+        random_string = "".join(
+            random.choices(string.ascii_letters + string.digits, k=8)
+        )
+
+        return f"kek{random_string}@gmail.com"
+
+    @staticmethod
+    def generate_random_password() -> str:
+        """Генерация случайного пароля"""
+        return faker.password()
+
+    @staticmethod
+    def generate_random_full_name() -> str:
+        """Генерация случайного имени"""
+        return f"{faker.first_name()} {faker.last_name()}"
 
     @staticmethod
     def generate_random_existing_movie_name(id_range: tuple = (1, 4000)) -> str:

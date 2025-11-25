@@ -15,6 +15,33 @@ def test_movie_data() -> dict[str : str | int | bool]:
     return movie_data
 
 
+@pytest.fixture(name="test_user")
+def test_user_info() -> dict:
+    email = DataGenerator.generate_random_email()
+    full_name = DataGenerator.generate_random_full_name()
+    password = DataGenerator.generate_random_password()
+
+    user_data = {
+        "email": email,
+        "fullName": full_name,
+        "password": password,
+        "passwordRepeat": password,
+        "roles": ["USER"],
+    }
+
+    return user_data
+
+
+@pytest.fixture()
+def login_info(test_user: dict) -> dict:
+    user_data = {
+        "email": test_user["email"],
+        "password": test_user["password"],
+    }
+
+    return user_data
+
+
 @pytest.fixture()
 def movie_id() -> int:
     """Возвращает случайный id"""

@@ -1,7 +1,7 @@
 import requests
 from custom_requester.custom_requester import CustomRequester
 
-from constants import AUTH_URL, LOGIN_ENDPOINT
+from constants import AUTH_URL, REGISTER_ENDPOINT, LOGIN_ENDPOINT
 
 
 class AuthAPI(CustomRequester):
@@ -10,6 +10,21 @@ class AuthAPI(CustomRequester):
     def __init__(self, session: requests.Session) -> None:
         super().__init__(session=session, base_url=AUTH_URL)
         self.session = session
+
+    def register_user(
+        self, user_data: dict, expected_status: int = 201
+    ) -> requests.Response:
+        """
+        Регистрация нового пользователя.
+        :param user_data: Данные пользователя.
+        :param expected_status: Ожидаемый статус-код.
+        """
+        return self.send_request(
+            method="POST",
+            endpoint=REGISTER_ENDPOINT,
+            data=user_data,
+            expected_status=expected_status,
+        )
 
     def login_user(
         self, login_data: dict[str:str], expected_status: int = 201

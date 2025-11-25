@@ -9,3 +9,4 @@ MOVIES_ENDPOINT = "/movies"
 
 # Auth endpoints
 LOGIN_ENDPOINT = "/login"
+REGISTER_ENDPOINT = "/register"
