@@ -1,5 +1,6 @@
 import pytest
 import requests
+import random
 
 from utils.data_generator import DataGenerator
 
@@ -43,9 +44,11 @@ def login_info(test_user: dict) -> dict:
 
 
 @pytest.fixture()
-def movie_id() -> int:
-    """Возвращает случайный id"""
-    return DataGenerator.generate_random_id()
+def movie_id(authenticated_admin: APIManager, test_movie: dict) -> int:
+    """Возвращает случайный существующий id"""
+    new_id = authenticated_admin.movies_api.create_movie(test_movie).json()["id"]
+    yield new_id
+    authenticated_admin.movies_api.delete_movie(new_id)
 
 
 @pytest.fixture(scope="session")
@@ -59,7 +62,11 @@ def session() -> requests.Session:
 @pytest.fixture(scope="session")
 def api_manager(session: requests.Session) -> APIManager:
     """Возвращает экземпляр APIManager"""
-    return APIManager(session)
+    api_manager = APIManager(session)
+
+    yield api_manager
+    api_manager.session.headers.clear()
+    api_manager.session.cookies.clear()
 
 
 @pytest.fixture()
@@ -71,15 +78,19 @@ def authenticated_admin(
 
     yield api_manager
     api_manager.session.headers.clear()
+    api_manager.session.cookies.clear()
 
 
 @pytest.fixture()
 def nonexistent_movie_id() -> int:
     """Возвращает несуществующий id для негативных тестов"""
-    return DataGenerator.generate_random_non_existing_id()
+    # Диапазон в котором точно нет фильмов
+    return random.randint(10000, 50000)
 
 
 @pytest.fixture()
-def existing_movie_name() -> str:
+def existing_movie_name(authenticated_admin: APIManager, test_movie: dict) -> str:
     """Возвращает существующие название фильма"""
-    return DataGenerator.generate_random_existing_movie_name()
+    movie_name = authenticated_admin.movies_api.create_movie(test_movie).json()["name"]
+
+    return movie_name

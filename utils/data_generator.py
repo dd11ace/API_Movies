@@ -43,66 +43,32 @@ class DataGenerator:
 
     @staticmethod
     def generate_random_password() -> str:
-        """Генерация случайного пароля"""
-        return faker.password()
+        """
+        Генерация пароля, соответствующего требованиям:
+        - Минимум 1 буква.
+        - Минимум 1 цифра.
+        - Допустимые символы.
+        - Длина от 8 до 20 символов
+        """
+        # Гарантия хотя бы одной буквы и цифры
+        letters = random.choice(string.ascii_letters)
+        digits = random.choice(string.digits)
+
+        # Дополнение пароля случайными символами из допустимых
+        special_chars = "?@#$%^&*|:"
+
+        all_chars = string.ascii_letters + string.digits + special_chars
+
+        remaining_length = random.randint(6, 18)
+        remaining_chars = "".join(random.choices(all_chars, k=remaining_length))
+
+        # Перемешиваем пароль для рандомизации
+        password = list(letters + digits + remaining_chars)
+        random.shuffle(password)
+
+        return "".join(password)
 
     @staticmethod
     def generate_random_full_name() -> str:
         """Генерация случайного имени"""
         return f"{faker.first_name()} {faker.last_name()}"
-
-    @staticmethod
-    def generate_random_existing_movie_name(id_range: tuple = (1, 4000)) -> str:
-        """Генерация случайного имени из существуещего фильма"""
-        while True:
-            random_id = random.randint(id_range[0], id_range[1])
-
-            try:
-                response = requests.get(
-                    f"{BASE_URL}{MOVIES_ENDPOINT}/{random_id}", timeout=3
-                )
-
-                if response.status_code == 200:
-                    return response.json()["name"]
-
-            except requests.exceptions.RequestException:
-                # Продолжение при ошибке
-                pass
-
-    @staticmethod
-    def generate_random_id(id_range: tuple = (1, 4000)) -> int:
-        """Генерация случайного существуего id"""
-        while True:
-            random_id = random.randint(id_range[0], id_range[1])
-
-            try:
-                response = requests.get(
-                    f"{BASE_URL}{MOVIES_ENDPOINT}/{random_id}", timeout=3
-                )
-
-                if response.status_code == 200:
-                    return random_id
-                # Для ошибки 404 цикл продолжается
-
-            except requests.exceptions.RequestException:
-                # Продолжение при ошибке
-                pass
-
-    @staticmethod
-    def generate_random_non_existing_id(id_range: tuple = (1, 10000)):
-        """Генерация случайного несуществуего id для негативных тестов"""
-        while True:
-            random_id = random.randint(id_range[0], id_range[1])
-
-            try:
-                response = requests.get(
-                    f"{BASE_URL}{MOVIES_ENDPOINT}/{random_id}", timeout=3
-                )
-
-                if response.status_code == 404:
-                    return random_id
-                # Для 200 цикл продолжается
-
-            except requests.exceptions.RequestException:
-                # Продолжение при ошибке
-                pass
