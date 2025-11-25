@@ -21,7 +21,7 @@ class DataGenerator:
         """
 
         movie_data = {
-            "name": faker.sentence(nb_words=2),
+            "name": faker.sentence(nb_words=3),
             "imageUrl": faker.image_url(),
             "price": random.randint(100, 1000),
             "description": faker.text(max_nb_chars=200),
